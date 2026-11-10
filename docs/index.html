@@ -24,38 +24,6 @@
 .nha-arc .crt{position:absolute;inset:0;pointer-events:none;z-index:30;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 62%,rgba(0,0,0,.38) 100%)}
 
-/* arcade cabinet around the screen: marquee, striped side panels, control deck, coin door */
-.nha-arc .cab{--side:34px;position:relative;max-width:1090px;margin:0 auto;background:#141a33;border-radius:28px 28px 12px 12px;overflow:hidden;box-shadow:0 0 0 4px #05070f,0 18px 40px rgba(0,0,0,.6)}
-.nha-arc .cab::before,.nha-arc .cab::after{content:"";position:absolute;top:0;bottom:0;width:var(--side);z-index:0;
-  background:repeating-linear-gradient(135deg,#ffd23f 0 10px,#141a33 10px 22px,#5ee6ff 22px 32px,#141a33 32px 44px)}
-.nha-arc .cab::before{left:0;box-shadow:inset -4px 0 0 #05070f}
-.nha-arc .cab::after{right:0;transform:scaleX(-1);box-shadow:inset -4px 0 0 #05070f}
-.nha-arc .cab>*{position:relative;z-index:1}
-.nha-arc .cab .screen{max-width:none;margin:16px calc(var(--side) + 12px) 0}
-.nha-arc .marquee{padding:26px 16px;text-align:center;background:radial-gradient(ellipse at center,#4a2f9a 0,#1a1440 72%);border-bottom:6px solid #05070f;box-shadow:inset 0 0 0 6px #05070f,inset 0 0 36px rgba(255,210,63,.4)}
-.nha-arc .marquee::before,.nha-arc .marquee::after{content:"";position:absolute;left:14px;right:14px;height:8px;background:radial-gradient(circle,#ffd23f 0 3px,transparent 4px) 0 0/16px 8px repeat-x;animation:nha-chase .5s steps(2) infinite}
-.nha-arc .marquee::before{top:11px}
-.nha-arc .marquee::after{bottom:11px;animation-direction:reverse}
-@keyframes nha-chase{to{background-position-x:16px}}
-.nha-arc .marquee .title{font-size:clamp(13px,3.4vw,30px);text-shadow:4px 4px 0 #b8371f,0 0 18px rgba(255,210,63,.7)}
-.nha-arc .deck{margin-top:16px;padding:20px 24px 22px;background:linear-gradient(#343c6a,#1a2044);border-top:6px solid var(--yellow);border-bottom:6px solid #05070f;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-around;gap:18px}
-.nha-arc .ctl{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:7px;color:#b9c3e6;text-align:center}
-.nha-arc .deck .stick{position:relative;width:60px;height:66px;background:none;box-shadow:none;padding:0}
-.nha-arc .deck .stick::before{content:"";position:absolute;left:4px;bottom:0;width:52px;height:18px;border-radius:50%;background:#05070f;box-shadow:inset 0 3px 0 #2c3358}
-.nha-arc .deck .stick i{position:absolute;left:50%;bottom:9px;width:8px;height:34px;background:#aeb7c2;translate:-50% 0;transform-origin:50% 100%}
-.nha-arc .deck .stick i::after{content:"";position:absolute;left:50%;top:-20px;width:28px;height:28px;border-radius:50%;translate:-50% 0;background:radial-gradient(circle at 35% 30%,#ffb3ad,#ff5a4f 45%,#9a1f18)}
-.nha-arc .deck .stick.wig i{animation:nha-wig .5s steps(6)}
-@keyframes nha-wig{25%{rotate:-24deg}75%{rotate:24deg}}
-.nha-arc .deck .rb,.nha-arc .deck .go{width:54px;height:54px;border-radius:50%;padding:0;border:4px solid #05070f;box-shadow:0 6px 0 #05070f;background:radial-gradient(circle at 35% 30%,#fff 0,var(--c) 32%,var(--cd) 100%)}
-.nha-arc .deck .rb:active,.nha-arc .deck .go:active{translate:0 4px;transform:none;box-shadow:0 2px 0 #05070f}
-.nha-arc .deck .go{--c:#ff5a4f;--cd:#9a1f18;width:84px;height:84px;display:grid;place-items:center;color:#fff;font-size:10px;text-decoration:none;text-shadow:2px 2px 0 #7d1f18;animation:nha-glow 1s steps(2) infinite}
-@keyframes nha-glow{50%{box-shadow:0 6px 0 #05070f,0 0 0 4px var(--yellow),0 0 22px 6px rgba(255,90,79,.8)}}
-.nha-arc .deck .go:focus-visible,.nha-arc .deck button:focus-visible,.nha-arc .door button:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}
-.nha-arc .door{padding:20px 16px 30px;background:#0e1227;display:flex;justify-content:center;gap:28px}
-.nha-arc .door .slot{width:78px;height:92px;padding:10px 6px;background:#1b2140;color:var(--red);box-shadow:inset 0 0 0 4px #05070f,inset 0 0 0 6px #343c6a;display:flex;flex-direction:column;align-items:center;justify-content:space-between;font-size:6px;line-height:1.5}
-.nha-arc .door .slot i{width:8px;height:34px;background:#05070f;box-shadow:0 0 0 3px #aeb7c2}
-.nha-arc .door .slot span{animation:nha-blink 1s steps(2) infinite;text-shadow:0 0 6px rgba(255,90,79,.9)}
-
 /* top bar */
 .nha-arc .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 16px 10px;background:var(--ink)}
 .nha-arc .title{font-size:clamp(12px,2.6vw,20px);color:var(--yellow);text-shadow:3px 3px 0 #b8371f,0 0 12px rgba(255,210,63,.45);line-height:1.3;margin:0;flex:1 1 260px}
@@ -234,10 +202,6 @@
 
 @media (max-width:720px){
   .nha-arc{--dam:38px;--cap:66px;padding:8px}
-  .nha-arc .cab{--side:10px;border-radius:18px 18px 8px 8px}
-  .nha-arc .cab .screen{margin:10px calc(var(--side) + 6px) 0}
-  .nha-arc .marquee{padding:24px 10px}
-  .nha-arc .deck{padding:16px 8px 18px;gap:10px}
   .nha-arc .screen{border-width:6px;border-radius:14px}
   .nha-arc .deep{grid-template-columns:1fr}
   .nha-arc .hide-s{display:none}
@@ -248,14 +212,13 @@
 @media (prefers-reduced-motion:reduce){.nha-arc *,.nha-arc *::before,.nha-arc *::after{animation:none!important;transition:none!important}}
 </style>
 
-<div class="cab">
-<div class="marquee"><h2 class="title">BAAJA Advocacy Challenge</h2></div>
 <div class="screen">
   <div class="crt"></div>
 
   <div class="top">
     <!-- In WordPress, upload nha-logo-8bit.jpg to the media library and put its URL in this src -->
     <img class="logo" src="nha-logo-8bit.jpg" alt="National Hydropower Association" width="64" height="64">
+    <h2 class="title">BAAJA Advocacy Challenge</h2>
     <span class="tag" data-el="tag">Loading</span>
     <button class="alt" id="nha-arc-sound" data-el="sound" aria-pressed="false">Sound: off</button>
   </div>
@@ -320,6 +283,7 @@
   </div>
 
   <div class="bar">
+    <a class="start" href="https://hydro.org/votervoice/?_zs=3UEOo&amp;_zl=lFCx3" target="_blank" rel="noopener" data-el="start">Press start: send your letter</a>
     <button class="demo-only" id="nha-arc-sim" data-el="sim">Simulate a letter</button>
     <button class="demo-only" id="nha-arc-auto" data-el="auto">Demo mode: off</button>
     <button class="alt demo-only" id="nha-arc-time" data-el="time">Time: auto</button>
@@ -328,19 +292,6 @@
   </div>
   <div class="foot"><span>Updated <span data-el="updated"></span></span><!-- Acknowledgement required by VoterVoice's API terms: their official logo, loaded from their own address -->
     <img class="vvlogo" src="https://d3dkdvqff0zqx.cloudfront.net/groups/system/images/poweredby_votervoice.png" alt="Powered by VoterVoice" height="48"></div>
-</div>
-
-<!-- cabinet control deck: Start is the real call to action, the rest are toys -->
-<div class="deck">
-  <div class="ctl"><button class="stick" id="nha-arc-stick" data-el="stick" aria-label="Joystick"><i></i></button><span>Joystick</span></div>
-  <div class="ctl"><a class="go" href="https://hydro.org/votervoice/?_zs=3UEOo&amp;_zl=lFCx3" target="_blank" rel="noopener" data-el="start">Start</a><span>Send your letter</span></div>
-  <div class="ctl"><button class="rb" id="nha-arc-a" data-el="btnA" style="--c:#5ee6ff;--cd:#1695c9" aria-label="Quack button"></button><span>Quack</span></div>
-  <div class="ctl"><button class="rb" id="nha-arc-b" data-el="btnB" style="--c:#ffd23f;--cd:#c98a00" aria-label="Surge button"></button><span>Surge</span></div>
-</div>
-<div class="door">
-  <button class="slot" data-el="coin1" aria-label="Coin slot"><i></i><span>Insert letter</span></button>
-  <button class="slot" data-el="coin2" aria-label="Coin slot"><i></i><span>Insert letter</span></button>
-</div>
 </div>
 
 <script>
@@ -751,15 +702,6 @@
     setTimeout(function(){ el.clear.classList.remove("show"); finaleOn = false; if (!cleared) el.bank.classList.remove("powered"); }, 6000);
   }
   el.finale.addEventListener("click", finale);
-
-  /* ---- cabinet controls: toys, apart from Start which opens the action page ---- */
-  el.stick.addEventListener("click", function(){ kick(el.stick, "wig", 500); fx("power"); });
-  el.btnA.addEventListener("click", function(){
-    Object.keys(ducks).forEach(function(k, n){ setTimeout(function(){ kick(ducks[k].node, "quack", 450); }, n * 70); });
-    fx("quack");
-  });
-  el.btnB.addEventListener("click", function(){ temp(el.chan, h("div", "wave"), 1600); kick(el.chan, "surge", 1600); fx("dam"); });
-  [el.coin1, el.coin2].forEach(function(b){ b.addEventListener("click", function(){ fx("coin"); banner("Press start to send your letter"); }); });
 
   /* ---- day and night, from the visitor's own clock ---- */
   var TIMES = ["auto", "day", "dusk", "night", "dawn"], timeMode = 0;
