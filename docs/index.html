@@ -221,6 +221,7 @@
     <h2 class="title">BAAJA Advocacy Challenge</h2>
     <span class="tag" data-el="tag">Loading</span>
     <button class="alt" id="nha-arc-sound" data-el="sound" aria-pressed="false">Sound: off</button>
+    <button class="alt" id="nha-arc-music" data-el="music">Music: Tailrace shuffle</button>
   </div>
 
   <div class="sky">
@@ -575,7 +576,77 @@
     if (ac && ac.state === "suspended") ac.resume();
     el.sound.textContent = "Sound: " + (soundOn ? "on" : "off"); el.sound.setAttribute("aria-pressed", soundOn);
     sfx("badge");
+    syncMusic();
   });
+
+  /* ---- background soundtrack: synthesized in the browser, no audio files ----
+     Track 1 "Tailrace shuffle" is an original loop written for this board.
+     Track 2 is our own arrangement of the opening of "The Blue Danube" (Johann Strauss II, 1866; public domain). */
+  var NOTE = { C:0, "C#":1, D:2, "D#":3, E:4, F:5, "F#":6, G:7, "G#":8, A:9, "A#":10, B:11 };
+  function hz(n){ var m = /^([A-G]#?)(\d)$/.exec(n); return 440 * Math.pow(2, (NOTE[m[1]] + (parseInt(m[2], 10) + 1) * 12 - 69) / 12); }
+  function shuffleTrack(){
+    var chords = [["C3","G3"],["G2","D3"],["A2","E3"],["F2","C3"],["C3","G3"],["G2","D3"],["F2","C3"],["G2","D3"]];
+    var lead = ["E5 G5 C6 G5 E5 G5 A5 G5", "D5 G5 B5 G5 D5 G5 A5 B5", "C6 A5 E5 A5 C6 B5 A5 E5", "F5 A5 C6 A5 F5 A5 G5 -",
+                "E5 G5 C6 G5 E6 D6 C6 G5", "D6 B5 G5 B5 D6 C6 B5 G5", "A5 C6 F5 A5 C6 A5 F5 A5", "G5 B5 D6 B5 G5 - D5 -"];
+    var steps = [];
+    lead.forEach(function(bar, b){
+      var notes = bar.split(" "), R = chords[b][0], F = chords[b][1], bass = [R, null, R, F, R, null, F, R];
+      notes.forEach(function(n, i){
+        var s = [];
+        if (n !== "-"){ var len = notes[i + 1] === "-" ? 1.9 : .9; s.push(["square", hz(n), len, .028]); }
+        if (bass[i]) s.push(["triangle", hz(bass[i]), .9, .07]);
+        if (i % 4 === 0) s.push(["kick"]); if (i % 2 === 1) s.push(["hat"]);
+        steps.push(s);
+      });
+    });
+    return { name: "Tailrace shuffle", step: 60 / 132 / 2, steps: steps };
+  }
+  function danubeTrack(){
+    var D = ["D3", "F#3", "A3"], A7 = ["A2", "E3", "G3"];
+    var bars = ["F#5 . D4", "D4 F#4 A4", "A4 - A5", "A5 . F#5", "F#5 . D4", "D4 F#4 A4", "A4 - A5", "A5 . G5",
+                "G5 . C#4", "C#4 E4 B4", "B4 - B5", "B5 . G5", "G5 . C#4", "C#4 E4 B4", "B4 - B5", "B5 . F#5"];
+    var steps = [];
+    bars.forEach(function(bar, b){
+      var notes = bar.split(" "), ch = b >= 7 && b <= 14 ? A7 : D;
+      notes.forEach(function(n, i){
+        var s = [];
+        if (n !== "." && n !== "-") s.push(["square", hz(n), notes[i + 1] === "-" ? 1.9 : .8, .03]);
+        if (i === 0) s.push(["triangle", hz(ch[0]), .9, .08]); else { s.push(["triangle", hz(ch[1]), .5, .045]); s.push(["triangle", hz(ch[2]), .5, .045]); }
+        steps.push(s);
+      });
+    });
+    return { name: "Blue Danube", step: 60 / 176, steps: steps };
+  }
+  var TRACKS = [shuffleTrack(), danubeTrack()], music = { track: 0, pos: 0, next: 0, timer: null, gain: null };
+  function playStep(s, t, step){
+    s.forEach(function(v){
+      if (v[0] === "kick"){ var o = ac.createOscillator(), g = ac.createGain(); o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(45, t + .09); g.gain.setValueAtTime(.09, t); g.gain.exponentialRampToValueAtTime(.0001, t + .1); o.connect(g); g.connect(music.gain); o.start(t); o.stop(t + .12); return; }
+      if (v[0] === "hat"){ var n = Math.floor(ac.sampleRate * .03), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0); for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n); var src = ac.createBufferSource(), hg = ac.createGain(); src.buffer = buf; hg.gain.value = .018; src.connect(hg); hg.connect(music.gain); src.start(t); return; }
+      var osc = ac.createOscillator(), gn = ac.createGain(), dur = v[2] * step; osc.type = v[0]; osc.frequency.value = v[1];
+      gn.gain.setValueAtTime(v[3], t); gn.gain.setValueAtTime(v[3], t + dur * .7); gn.gain.linearRampToValueAtTime(.0001, t + dur);
+      osc.connect(gn); gn.connect(music.gain); osc.start(t); osc.stop(t + dur + .02);
+    });
+  }
+  function stopMusic(){
+    if (music.timer){ clearInterval(music.timer); music.timer = null; }
+    if (music.gain){ try { music.gain.gain.setValueAtTime(0, ac.currentTime); music.gain.disconnect(); } catch (e) {} music.gain = null; }
+  }
+  function startMusic(){
+    stopMusic();
+    var tr = TRACKS[music.track]; if (!tr || !ac) return;
+    music.gain = ac.createGain(); music.gain.gain.value = 1; music.gain.connect(ac.destination);
+    music.pos = 0; music.next = ac.currentTime + .15;
+    music.timer = setInterval(function(){
+      if (music.next < ac.currentTime) music.next = ac.currentTime + .05;       /* fell behind (tab was throttled): skip ahead rather than burst */
+      while (music.next < ac.currentTime + .35){ playStep(tr.steps[music.pos], music.next, tr.step); music.next += tr.step; music.pos = (music.pos + 1) % tr.steps.length; }
+    }, 100);
+  }
+  function syncMusic(){
+    el.music.textContent = "Music: " + (TRACKS[music.track] ? TRACKS[music.track].name : "off");
+    if (soundOn && ac && TRACKS[music.track] && !document.hidden) startMusic(); else stopMusic();
+  }
+  el.music.addEventListener("click", function(){ music.track = (music.track + 1) % (TRACKS.length + 1); syncMusic(); });
+  document.addEventListener("visibilitychange", syncMusic);
 
   /* ---- click-to-play toys: each scene item has its own sound and a small animation ---- */
   var SALMON = fromRows(["...PPPPPP....P",".PPPPPPPPPP.PP","PPKPPPPPPPPPPP","PSSSSSSSSSPPPP",".SSSSSSSSS..PP","...SSSSS.....P"], { P:"#ff8a7a", S:"#e8ecf5", K:"#1b1b2f" });
