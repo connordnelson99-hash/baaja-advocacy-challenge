@@ -1,26 +1,54 @@
 name: Refresh leaderboard
 
+# How this stays hourly
+# ---------------------
+# GitHub starts scheduled runs on this account 5-10 hours late (see the
+# rto-calendar repo: cron 11:00 UTC, actual starts 16:00-21:00 UTC). A
+# manually dispatched run, though, starts within seconds. So each run
+# refreshes the data, waits ~55 minutes, then dispatches the next run itself.
+#
+# The cron below is only a backstop: whenever GitHub does get round to a
+# scheduled run, it refreshes once and, if no chain is alive, starts one.
+
 on:
   schedule:
-    # Hourly, at 7 past to avoid the top-of-hour rush that delays scheduled runs.
     - cron: '7 * * * *'
-  workflow_dispatch:        # manual run from the Actions tab
+  workflow_dispatch:
+    inputs:
+      chain:
+        description: 'Set by the workflow itself when it starts the next hourly run'
+        type: boolean
+        default: false
 
 permissions:
-  contents: write           # so the job can commit the refreshed JSON back
-
-concurrency:
-  group: refresh
-  cancel-in-progress: false
+  contents: write           # commit the refreshed JSON back
+  actions: write            # dispatch the next run
 
 jobs:
   refresh:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 75
     env:
       VOTERVOICE_API_KEY: ${{ secrets.VOTERVOICE_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
 
     steps:
+      - name: Decide whether this run carries the hourly chain
+        id: chain
+        # A run the chain started itself always carries on. Any other run
+        # (the cron backstop, or a person clicking "Run workflow") carries on
+        # only if no other run of this workflow is alive; otherwise it just
+        # refreshes once and exits, so there is never more than one chain.
+        run: |
+          others=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow refresh.yml --limit 20 \
+            --json databaseId,status \
+            --jq "[.[] | select(.status != \"completed\" and .databaseId != $GITHUB_RUN_ID)] | length")
+          if [ "${{ inputs.chain }}" = "true" ] || [ "$others" = "0" ]; then
+            echo "carry=true" >> "$GITHUB_OUTPUT"; echo "This run carries the chain."
+          else
+            echo "carry=false" >> "$GITHUB_OUTPUT"; echo "Another run is alive ($others); refreshing once only."
+          fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
@@ -46,3 +74,11 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
+      - name: Wait, then start the next hourly run
+        # always(): a failed refresh (VoterVoice down, say) must not break the
+        # chain. A cancelled run does break it; the cron backstop restarts it.
+        if: always() && !cancelled() && steps.chain.outputs.carry == 'true'
+        run: |
+          sleep 3300
+          gh workflow run refresh.yml --repo "$GITHUB_REPOSITORY" --ref main -f chain=true
