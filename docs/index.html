@@ -93,7 +93,10 @@
 .nha-arc .duck img{position:absolute;right:0;top:3px;width:24px;height:24px;animation:nha-bob .7s steps(2) infinite}
 .nha-arc .duck.lead img{filter:drop-shadow(0 0 4px var(--yellow))}
 @keyframes nha-bob{50%{translate:0 2px}}
-.nha-arc .duck .lab{position:absolute;left:8px;top:6px;white-space:nowrap;font-size:8px;line-height:1;background:rgba(11,15,30,.82);padding:5px 5px 4px;color:var(--white)}
+.nha-arc .duck .lab{position:absolute;left:8px;top:6px;white-space:nowrap;font-size:8px;line-height:1;background:rgba(11,15,30,.82);padding:5px 5px 4px;color:var(--white);display:flex;gap:6px}
+.nha-arc .duck .lab .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.nha-arc .duck .lab b,.nha-arc .duck .lab i{flex:none;font-style:normal}
+.nha-arc .duck .lab i{color:var(--cyan)}
 .nha-arc .duck.flip .lab{left:auto;right:30px}
 .nha-arc .duck .lab b{font-weight:400;color:var(--yellow)}
 .nha-arc .duck.lead .lab{box-shadow:0 0 0 2px var(--yellow)}
@@ -190,7 +193,8 @@
 .nha-arc .bar{background:var(--ink);padding:6px 16px 16px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .nha-arc .bar .note{font-size:7px;color:#8f9bc4;margin-left:auto;line-height:1.8}
 .nha-arc .start{animation:nha-blink 1s steps(2) infinite;background:var(--red);color:#fff;box-shadow:0 -3px 0 var(--white),0 3px 0 #7d1f18,-3px 0 0 var(--white),3px 0 0 #7d1f18}
-.nha-arc .foot{background:var(--ink);padding:0 16px 14px;font-size:7px;color:#8f9bc4;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+.nha-arc .foot{background:var(--ink);padding:0 16px 14px;font-size:7px;color:#8f9bc4;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+.nha-arc .vvlogo{height:48px;width:auto;image-rendering:auto;background:#fff;padding:4px 8px}
 
 @media (max-width:720px){
   .nha-arc{--dam:38px;--cap:66px;padding:8px}
@@ -275,7 +279,8 @@
     <button class="alt demo-only" id="nha-arc-finale" data-el="finale">Preview finale</button>
     <span class="note">Score = <span data-el="ppl">8</span> per letter + <span data-el="ppa">20</span> per participating employee<br>Ducks race to <span data-el="finish">1,000</span> points. The power line lights up as all companies near the goal.<br>Psst: turn sound on, then click the ducks, dam, wires, Capitol, river, clouds and crew.</span>
   </div>
-  <div class="foot"><span>Updated <span data-el="updated"></span></span><span>Powered by VoterVoice (logo goes here)</span></div>
+  <div class="foot"><span>Updated <span data-el="updated"></span></span><!-- Acknowledgement required by VoterVoice's API terms: their official logo, loaded from their own address -->
+    <img class="vvlogo" src="https://d3dkdvqff0zqx.cloudfront.net/groups/system/images/poweredby_votervoice.png" alt="Powered by VoterVoice" height="48"></div>
 </div>
 
 <script>
@@ -461,8 +466,12 @@
     sorted.forEach(function(c, rank){
       var s = score(c), D = ducks[c.id], S = state[c.id], x = Math.min(100, s / DATA.finishScore * 100), li = level(s), quiet = first || S.fresh;
       D.x = x; D.node.style.left = "max(30px, " + x.toFixed(2) + "%)";
-      D.node.classList.toggle("lead", rank === 0); D.node.classList.toggle("flip", x > 60);
-      D.lab.textContent = ""; D.lab.appendChild(h("b", null, ord(rank + 1))); D.lab.appendChild(document.createTextNode(" " + c.tag + " " + s));
+      /* the label shows the full organization name on whichever side of the duck has more room, trimmed with "..." if it cannot fit */
+      var cw = el.chan.clientWidth, px = Math.max(30, cw * x / 100), flip = px > cw / 2;
+      D.node.classList.toggle("lead", rank === 0); D.node.classList.toggle("flip", flip);
+      D.lab.style.maxWidth = Math.max(60, flip ? px - 36 : cw - px - 12) + "px";
+      D.lab.title = c.name;
+      D.lab.textContent = ""; D.lab.appendChild(h("b", null, ord(rank + 1))); D.lab.appendChild(h("span", "nm", c.name)); D.lab.appendChild(h("i", null, s));
 
       var tr = h("tr", rank < 3 ? "r" + (rank + 1) : ""); if (bumps[c.id]) tr.classList.add("bump");
       tr.appendChild(h("td", null, ord(rank + 1))); tr.appendChild(h("td", null, c.tag));
@@ -470,10 +479,10 @@
       var cr = h("td", "cr");
       CREW.forEach(function(b){
         var has = b.test(c), img = h("img"); img.src = CREWIMG[b.key][has ? 1 : 0]; img.alt = has ? b.name : "Locked"; img.title = b.name + ": " + b.rule; cr.appendChild(img);
-        if (has && !S.crew[b.key]){ S.crew[b.key] = true; if (!quiet){ banner(c.tag + " recruited " + b.name + "!"); snd = snd || "badge"; } }
+        if (has && !S.crew[b.key]){ S.crew[b.key] = true; if (!quiet){ banner(c.name + " recruited " + b.name + "!"); snd = snd || "badge"; } }
       });
       tr.appendChild(cr); tr.appendChild(h("td", "sc", pad(s))); el.scores.appendChild(tr);
-      if (!quiet && li > S.lvl){ banner(c.tag + " level up: " + LEVELS[li].name + "!"); snd = "level"; }
+      if (!quiet && li > S.lvl){ banner(c.name + " level up: " + LEVELS[li].name + "!"); snd = "level"; }
       S.lvl = li; S.fresh = false;
     });
 
@@ -745,6 +754,7 @@
   if (location.hash === "#sample") start(DATA, false); else load(true);
   setInterval(function(){ if (LIVE && !autoT) load(false); }, 5 * 60 * 1000);   /* pick up the hourly refresh without a reload */
   setInterval(function(){ if (LIVE) renderFeed(); }, 60 * 1000);                /* keep the "x min ago" labels current */
+  var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz = setTimeout(function(){ render(true); }, 200); });   /* re-fit the duck labels */
 })();
 </script>
 </div>
