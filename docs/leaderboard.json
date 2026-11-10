@@ -1,0 +1,151 @@
+{
+  "updated": "2026-11-10T19:53:58Z",
+  "campaign": {
+    "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
+    "goal": 500
+  },
+  "scoring": {
+    "perLetter": 8,
+    "perAdvocate": 20
+  },
+  "finishScore": 1000,
+  "companies": [
+    {
+      "name": "UBC Millwrights",
+      "letters": 12,
+      "advocates": 1,
+      "campaigns": 6,
+      "bothChambers": true
+    },
+    {
+      "name": "Independent advocates",
+      "letters": 9,
+      "advocates": 3,
+      "campaigns": 4,
+      "bothChambers": true
+    },
+    {
+      "name": "Confluence Hydro",
+      "letters": 6,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "American Hydro",
+      "letters": 4,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Consumers Energy",
+      "letters": 4,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "NHA",
+      "letters": 4,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Tacoma Public Utilities",
+      "letters": 4,
+      "advocates": 1,
+      "campaigns": 4,
+      "bothChambers": true
+    },
+    {
+      "name": "ANDRITZ Hydro Corp",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Appalachian Hydro Associates, Inc.",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Canyon Hydro",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Hydro Green Energy",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Hydro SME LLC",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 2,
+      "bothChambers": true
+    },
+    {
+      "name": "Kleinschmidt",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Michael N. McCarty Law Office PLLC",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "RIZZO International, Inc.",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    }
+  ],
+  "activity": [
+    {
+      "company": "Michael N. McCarty Law Office PLLC",
+      "target": "both chambers of Congress",
+      "at": "2026-11-09T22:41:28Z"
+    },
+    {
+      "company": "UBC Millwrights",
+      "target": "both chambers of Congress",
+      "at": "2026-11-05T22:44:22Z"
+    },
+    {
+      "company": "Appalachian Hydro Associates, Inc.",
+      "target": "both chambers of Congress",
+      "at": "2026-11-03T20:10:03Z"
+    },
+    {
+      "company": "UBC Millwrights",
+      "target": "both chambers of Congress",
+      "at": "2026-11-03T20:01:53Z"
+    },
+    {
+      "company": "Hydro Green Energy",
+      "target": "both chambers of Congress",
+      "at": "2026-10-26T16:46:02Z"
+    },
+    {
+      "company": "Canyon Hydro",
+      "target": "both chambers of Congress",
+      "at": "2026-10-22T15:50:58Z"
+    }
+  ]
+}

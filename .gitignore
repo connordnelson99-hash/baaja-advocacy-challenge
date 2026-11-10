@@ -1,0 +1,11 @@
+# Secrets: never commit the VoterVoice API key
+key.env
+.env
+*.env
+
+# Raw API responses contain advocate names, emails and zip codes
+raw/
+
+__pycache__/
+.venv/
+.claude/

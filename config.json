@@ -1,0 +1,20 @@
+{
+  "association": "HYDRO",
+  "campaign": {
+    "id": 140074,
+    "nameContains": "BAAJA",
+    "displayName": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
+    "goal": 500,
+    "since": "2026-10-05T00:00:00Z"
+  },
+  "countLettersBy": "deliveries",
+  "badgesSince": "2026-01-01T00:00:00Z",
+  "scoring": { "perLetter": 8, "perAdvocate": 20 },
+  "finishScore": 1000,
+  "unaffiliatedLabel": "Independent advocates",
+  "includeUnaffiliated": true,
+  "companyAliases": {
+    "example power co": "Example Power Company"
+  },
+  "excludeCompanies": []
+}
