@@ -825,6 +825,15 @@
   if (location.hash === "#sample") start(DATA, false); else load(true);
   setInterval(function(){ if (LIVE && !autoT) load(false); }, 5 * 60 * 1000);   /* pick up the hourly refresh without a reload */
   setInterval(function(){ if (LIVE) renderFeed(); }, 60 * 1000);                /* keep the "x min ago" labels current */
+  /* when embedded in an iframe, tell the host page how tall the board is so the frame can fit it (height only, nothing else is sent) */
+  if (window.parent !== window){
+    var lastH = 0, postHeight = function(){
+      var hgt = Math.ceil(root.getBoundingClientRect().height);
+      if (hgt !== lastH){ lastH = hgt; window.parent.postMessage({ type: "nha-leaderboard-height", height: hgt }, "*"); }
+    };
+    if (window.ResizeObserver) new ResizeObserver(postHeight).observe(root);
+    window.addEventListener("load", postHeight); setInterval(postHeight, 2000); postHeight();
+  }
   var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz = setTimeout(function(){ render(true); }, 200); });   /* re-fit the duck labels */
 })();
 </script>
