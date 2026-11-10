@@ -268,7 +268,7 @@
   </div>
 
   <div class="bar">
-    <a class="start" href="#" data-el="start">Press start: send your letter</a>
+    <a class="start" href="https://hydro.org/votervoice/?_zs=3UEOo&amp;_zl=lFCx3" target="_blank" rel="noopener" data-el="start">Press start: send your letter</a>
     <button class="demo-only" id="nha-arc-sim" data-el="sim">Simulate a letter</button>
     <button class="demo-only" id="nha-arc-auto" data-el="auto">Demo mode: off</button>
     <button class="alt demo-only" id="nha-arc-time" data-el="time">Time: auto</button>
@@ -384,7 +384,8 @@
   var LANE = 30, ducks = {}, state = {}, prevLeader = null, prevTotal = 0, cleared = false;
 
   function score(c){ return c.letters * DATA.scoring.perLetter + c.advocates * DATA.scoring.perAdvocate; }
-  function level(s){ var i = 0; LEVELS.forEach(function(l, k){ if (s >= l.min) i = k; }); return i; }
+  /* level thresholds are written for a 1,000-point finish and scale with whatever the finish score is */
+  function level(s){ var i = 0, f = DATA.finishScore / 1000; LEVELS.forEach(function(l, k){ if (s >= l.min * f) i = k; }); return i; }
   function tag(name){ var w = name.split(/\s+/), t = w.map(function(x){ return x[0]; }).join(""); if (t.length < 3) t += w[w.length - 1].slice(1, 4 - t.length); return t.slice(0, 3).toUpperCase(); }
   function ord(n){ return n + (["TH","ST","ND","RD"][n % 100 > 10 && n % 100 < 14 ? 0 : n % 10] || "TH"); }
   function pad(n){ return ("000000" + n).slice(-6); }
@@ -711,7 +712,7 @@
     if (autoT){ clearInterval(autoT); autoT = null; } else { simulate(); autoT = setInterval(simulate, 1800); }
     el.auto.textContent = "Demo mode: " + (autoT ? "on" : "off");
   });
-  el.start.addEventListener("click", function(e){ e.preventDefault(); banner("Link this to your action center"); });
+  el.start.addEventListener("click", function(){ sfx("level"); });
 
   build();
   applyTime();

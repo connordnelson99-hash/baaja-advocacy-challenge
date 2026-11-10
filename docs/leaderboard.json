@@ -1,14 +1,14 @@
 {
-  "updated": "2026-11-10T19:53:58Z",
+  "updated": "2026-11-10T20:45:43Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
-    "goal": 500
+    "goal": 150
   },
   "scoring": {
     "perLetter": 8,
     "perAdvocate": 20
   },
-  "finishScore": 1000,
+  "finishScore": 300,
   "companies": [
     {
       "name": "UBC Millwrights",
