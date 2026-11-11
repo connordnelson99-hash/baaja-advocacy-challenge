@@ -60,13 +60,14 @@ jobs:
         # prints counts only: this repository and its run logs are public.
         run: python scripts/refresh.py
 
-      - name: Commit the data file if it changed
+      - name: Commit the data file
+        # Every successful run commits, because the file's "checked" time moves
+        # each hour. That is what lets the board show the refresh is alive.
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add docs/leaderboard.json
-          # Ignore a change that is only the "updated" timestamp.
-          if git diff --cached --quiet -I '"updated"'; then
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             git reset -q
           else

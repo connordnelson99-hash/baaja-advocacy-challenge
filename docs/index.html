@@ -291,7 +291,7 @@
     <button class="alt demo-only" id="nha-arc-finale" data-el="finale">Preview finale</button>
     <span class="note">Psst: turn sound on, then click the ducks, dam, wires, Capitol, river, clouds and crew.</span>
   </div>
-  <div class="foot"><span>Updated <span data-el="updated"></span></span><!-- Acknowledgement required by VoterVoice's API terms: their official logo, loaded from their own address -->
+  <div class="foot"><span>Checked <span data-el="checked"></span><br>Last new letter <span data-el="updated"></span></span><!-- Acknowledgement required by VoterVoice's API terms: their official logo, loaded from their own address -->
     <img class="vvlogo" src="https://d3dkdvqff0zqx.cloudfront.net/groups/system/images/poweredby_votervoice.png" alt="Powered by VoterVoice" height="48"></div>
 </div>
 
@@ -460,7 +460,8 @@
     bumps = bumps || {};
     el.camp.textContent = DATA.campaign.name;
     el.goal.textContent = DATA.campaign.goal;
-    el.updated.textContent = when(DATA.updated);
+    var newest = (DATA.activity && DATA.activity[0] && DATA.activity[0].at) || DATA.updated;
+    el.updated.textContent = when(newest); el.checked.textContent = when(DATA.checked || DATA.updated);
     el.ppl.textContent = DATA.scoring.perLetter; el.ppa.textContent = DATA.scoring.perAdvocate; el.finish.textContent = Number(DATA.finishScore).toLocaleString(); el.goal2.textContent = Number(DATA.campaign.goal).toLocaleString();
     DATA.companies.forEach(ensure);
     var sorted = DATA.companies.slice().sort(function(a, b){ return score(b) - score(a) || b.letters - a.letters || a.name.localeCompare(b.name); });

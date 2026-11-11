@@ -33,7 +33,7 @@ def load_key():
     raise SystemExit("No API key found. Set VOTERVOICE_API_KEY or put the key in key.env.")
 
 
-def get(path, params=None, raw_query="", retries=3):
+def get(path, params=None, raw_query="", retries=4):
     """GET a VoterVoice endpoint. raw_query is appended as-is (for the API's date=>... operators).
     Returns (status, parsed JSON or None). Never raises on HTTP errors; never prints the key."""
     query = urllib.parse.urlencode(params or {})
@@ -60,9 +60,11 @@ def get(path, params=None, raw_query="", retries=3):
                 return err.code, json.loads(body)
             except ValueError:
                 return err.code, {"error": body[:300]}
-        except urllib.error.URLError as err:
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as err:
+            # Includes a read that stalls mid-response (a bare TimeoutError, not a URLError),
+            # which failed the 2026-11-11 11:31 UTC run before this was retried.
             if attempt < retries - 1:
-                time.sleep(2 * (attempt + 1))
+                time.sleep(3 * (attempt + 1))
                 continue
-            return 0, {"error": str(err.reason)}
+            return 0, {"error": str(getattr(err, "reason", err))}
     return 0, None

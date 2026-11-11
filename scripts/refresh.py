@@ -83,6 +83,10 @@ class Companies:
                 continue
             self.lookups += 1
             status, data = vv.get("/contacts", {"association": self.assoc, **params})
+            if status not in (200, 204, 404):
+                # Stop rather than publish: treating a failed lookup as "no company" would move
+                # that advocate's letters to the unaffiliated bucket for an hour.
+                raise SystemExit(f"contact lookup failed after retries: HTTP {status}")
             if status == 200:
                 raw = find_key(data, "businessCompanyName")
                 if raw:
@@ -176,8 +180,11 @@ def main():
     out_companies.sort(key=lambda c: (-c["letters"], c["name"]))
 
     activity.sort(key=lambda a: a["at"] or "", reverse=True)
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     out = {
-        "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        # "checked" moves on every successful run; "updated" only when the numbers change.
+        "checked": now,
+        "updated": now,
         "campaign": {"name": camp["displayName"], "goal": camp["goal"]},
         "scoring": CONFIG["scoring"],
         "finishScore": CONFIG["finishScore"],
@@ -185,6 +192,13 @@ def main():
         # company is null for advocates with no company on file; the board says "An independent advocate"
         "activity": [{"company": None if a["ref"] == CONFIG["unaffiliatedLabel"] else companies.name(a["ref"]), "target": a["target"], "at": a["at"]} for a in activity[:6]],
     }
+    try:
+        previous = json.loads(OUT.read_text(encoding="utf-8"))
+        same = all(previous.get(k) == out[k] for k in ("campaign", "scoring", "finishScore", "companies", "activity"))
+        if same and previous.get("updated"):
+            out["updated"] = previous["updated"]
+    except (OSError, ValueError):
+        pass
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     total = sum(c["letters"] for c in out_companies)
