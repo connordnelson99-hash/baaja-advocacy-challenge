@@ -6,6 +6,9 @@ key.env
 # Raw API responses contain advocate names, emails and zip codes
 raw/
 
+# Remembered company lookups (hashed advocate fingerprints); kept in GitHub's workflow cache, not the repo
+.cache/
+
 __pycache__/
 .venv/
 .claude/

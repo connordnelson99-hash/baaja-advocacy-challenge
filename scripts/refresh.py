@@ -8,6 +8,7 @@ Usage: python scripts/refresh.py
 """
 import collections
 import datetime
+import hashlib
 import json
 import re
 import sys
@@ -65,18 +66,50 @@ def company_key(name):
     return name.casefold()
 
 
+CACHE_FILE = vv.ROOT / ".cache" / "companies.json"
+CACHE_HOURS = 24
+
+
 class Companies:
-    """Looks up each advocate's company once per run. Nothing here is persisted."""
+    """Looks up each advocate's company, remembering the answer between runs.
+
+    The memory file maps an opaque fingerprint of the advocate (a salted hash, not their id,
+    name or email) to the company text on their contact record. It lives in .cache/, which is
+    git-ignored and kept in GitHub's workflow cache, never in the repository. Entries expire
+    after CACHE_HOURS so a company corrected in VoterVoice comes through within a day.
+    """
 
     def __init__(self, assoc):
-        self.assoc, self.cache, self.lookups, self.misses = assoc, {}, 0, 0
+        self.assoc, self.cache, self.lookups, self.misses, self.remembered = assoc, {}, 0, 0, 0
         self.aliases = {company_key(k): v for k, v in CONFIG.get("companyAliases", {}).items()}
         self.display = collections.defaultdict(collections.Counter)
+        self.salt = hashlib.sha256(vv.load_key().encode()).hexdigest()
+        self.now = datetime.datetime.now(datetime.timezone.utc)
+        try:
+            self.store = json.loads(CACHE_FILE.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            self.store = {}
 
-    def of(self, user):
-        uid = user.get("id") or user.get("contactId") or user.get("email")
-        if uid in self.cache:
-            return self.cache[uid]
+    def fingerprint(self, uid):
+        return hashlib.sha256(f"{self.salt}:{uid}".encode()).hexdigest()[:20]
+
+    def remembered_raw(self, uid):
+        entry = self.store.get(self.fingerprint(uid))
+        if not entry:
+            return False, None
+        try:
+            age = self.now - datetime.datetime.fromisoformat(entry["at"])
+        except (KeyError, ValueError):
+            return False, None
+        return (age < datetime.timedelta(hours=CACHE_HOURS)), entry.get("company")
+
+    def save(self):
+        cutoff = self.now - datetime.timedelta(days=30)
+        keep = {k: v for k, v in self.store.items() if datetime.datetime.fromisoformat(v["at"]) > cutoff}
+        CACHE_FILE.parent.mkdir(exist_ok=True)
+        CACHE_FILE.write_text(json.dumps(keep), encoding="utf-8")
+
+    def lookup(self, user):
         raw = None
         for params in ({"contactId": user.get("contactId")}, {"email": user.get("email")}):
             if not next(iter(params.values())):
@@ -91,6 +124,18 @@ class Companies:
                 raw = find_key(data, "businessCompanyName")
                 if raw:
                     break
+        return raw
+
+    def of(self, user):
+        uid = user.get("id") or user.get("contactId") or user.get("email")
+        if uid in self.cache:
+            return self.cache[uid]
+        fresh, raw = self.remembered_raw(uid)
+        if fresh:
+            self.remembered += 1
+        else:
+            raw = self.lookup(user)
+            self.store[self.fingerprint(uid)] = {"company": raw, "at": self.now.isoformat()}
         if not raw:
             self.misses += 1
             result = None
@@ -202,7 +247,8 @@ def main():
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     total = sum(c["letters"] for c in out_companies)
-    print(f"companies: {len(out_companies)}  letters: {total}  contact lookups: {companies.lookups}  advocates without a company: {companies.misses}")
+    companies.save()
+    print(f"companies: {len(out_companies)}  letters: {total}  contact lookups: {companies.lookups}  remembered: {companies.remembered}  advocates without a company: {companies.misses}")
 
 
 if __name__ == "__main__":

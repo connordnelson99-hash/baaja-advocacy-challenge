@@ -48,7 +48,8 @@ def get(path, params=None, raw_query="", retries=4):
     })
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=60) as resp:
+            # A healthy call answers in well under a second; 20s is ample and keeps a stall short.
+            with urllib.request.urlopen(req, timeout=20) as resp:
                 body = resp.read().decode("utf-8", "replace")
                 return resp.status, (json.loads(body) if body.strip() else None)
         except urllib.error.HTTPError as err:

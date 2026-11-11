@@ -55,6 +55,16 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Restore remembered company lookups
+        # Cache entries cannot be overwritten, so each run saves under its own
+        # key and the next run restores the most recent one. The file holds
+        # salted hashes and company names only, and is not part of the repo.
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: companies-${{ github.run_id }}
+          restore-keys: companies-
+
       - name: Pull from VoterVoice and build docs/leaderboard.json
         # Standard library only, so there is nothing to install. The script
         # prints counts only: this repository and its run logs are public.
