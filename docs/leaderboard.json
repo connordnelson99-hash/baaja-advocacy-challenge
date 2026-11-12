@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-12T22:38:16Z",
-  "updated": "2026-11-10T20:45:43Z",
+  "checked": "2026-11-12T23:33:30Z",
+  "updated": "2026-11-12T23:33:30Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -13,7 +13,7 @@
   "companies": [
     {
       "name": "UBC Millwrights",
-      "letters": 12,
+      "letters": 18,
       "advocates": 1,
       "campaigns": 6,
       "bothChambers": true
@@ -119,6 +119,11 @@
   ],
   "activity": [
     {
+      "company": "UBC Millwrights",
+      "target": "both chambers of Congress",
+      "at": "2026-11-12T23:27:05Z"
+    },
+    {
       "company": "Michael N. McCarty Law Office PLLC",
       "target": "both chambers of Congress",
       "at": "2026-11-09T22:41:28Z"
@@ -142,11 +147,6 @@
       "company": "Hydro Green Energy",
       "target": "both chambers of Congress",
       "at": "2026-10-26T16:46:02Z"
-    },
-    {
-      "company": "Canyon Hydro",
-      "target": "both chambers of Congress",
-      "at": "2026-10-22T15:50:58Z"
     }
   ]
 }
