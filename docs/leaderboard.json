@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-16T20:36:32Z",
-  "updated": "2026-11-12T23:33:30Z",
+  "checked": "2026-11-16T21:31:44Z",
+  "updated": "2026-11-16T21:31:44Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -27,6 +27,13 @@
     },
     {
       "name": "Confluence Hydro",
+      "letters": 6,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
+      "name": "Tidal Energy Corp",
       "letters": 6,
       "advocates": 1,
       "campaigns": 1,
@@ -119,6 +126,16 @@
   ],
   "activity": [
     {
+      "company": "Tidal Energy Corp",
+      "target": "both chambers of Congress",
+      "at": "2026-11-16T20:52:20Z"
+    },
+    {
+      "company": "Tidal Energy Corp",
+      "target": "both chambers of Congress",
+      "at": "2026-11-16T20:41:38Z"
+    },
+    {
       "company": "UBC Millwrights",
       "target": "both chambers of Congress",
       "at": "2026-11-12T23:27:05Z"
@@ -137,16 +154,6 @@
       "company": "Appalachian Hydro Associates, Inc.",
       "target": "both chambers of Congress",
       "at": "2026-11-03T20:10:03Z"
-    },
-    {
-      "company": "UBC Millwrights",
-      "target": "both chambers of Congress",
-      "at": "2026-11-03T20:01:53Z"
-    },
-    {
-      "company": "Hydro Green Energy",
-      "target": "both chambers of Congress",
-      "at": "2026-10-26T16:46:02Z"
     }
   ]
 }
