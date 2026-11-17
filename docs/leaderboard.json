@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-17T16:54:11Z",
-  "updated": "2026-11-16T21:31:44Z",
+  "checked": "2026-11-17T17:49:34Z",
+  "updated": "2026-11-17T17:49:34Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -20,8 +20,8 @@
     },
     {
       "name": "Independent advocates",
-      "letters": 9,
-      "advocates": 3,
+      "letters": 12,
+      "advocates": 4,
       "campaigns": 4,
       "bothChambers": true
     },
@@ -126,6 +126,11 @@
   ],
   "activity": [
     {
+      "company": null,
+      "target": "both chambers of Congress",
+      "at": "2026-11-17T17:44:46Z"
+    },
+    {
       "company": "Tidal Energy Corp",
       "target": "both chambers of Congress",
       "at": "2026-11-16T20:52:20Z"
@@ -149,11 +154,6 @@
       "company": "UBC Millwrights",
       "target": "both chambers of Congress",
       "at": "2026-11-05T22:44:22Z"
-    },
-    {
-      "company": "Appalachian Hydro Associates, Inc.",
-      "target": "both chambers of Congress",
-      "at": "2026-11-03T20:10:03Z"
     }
   ]
 }
