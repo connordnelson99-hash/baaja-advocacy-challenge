@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-18T20:33:21Z",
-  "updated": "2026-11-17T17:49:34Z",
+  "checked": "2026-11-18T21:28:33Z",
+  "updated": "2026-11-18T21:28:33Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -82,6 +82,13 @@
       "bothChambers": true
     },
     {
+      "name": "Burns and McDonnell",
+      "letters": 3,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": true
+    },
+    {
       "name": "Canyon Hydro",
       "letters": 3,
       "advocates": 1,
@@ -126,6 +133,11 @@
   ],
   "activity": [
     {
+      "company": "Burns and McDonnell",
+      "target": "both chambers of Congress",
+      "at": "2026-11-18T20:59:43Z"
+    },
+    {
       "company": null,
       "target": "both chambers of Congress",
       "at": "2026-11-17T17:44:46Z"
@@ -149,11 +161,6 @@
       "company": "Michael N. McCarty Law Office PLLC",
       "target": "both chambers of Congress",
       "at": "2026-11-09T22:41:28Z"
-    },
-    {
-      "company": "UBC Millwrights",
-      "target": "both chambers of Congress",
-      "at": "2026-11-05T22:44:22Z"
     }
   ]
 }
