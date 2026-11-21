@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-21T13:04:36Z",
-  "updated": "2026-11-21T08:28:22Z",
+  "checked": "2026-11-21T13:59:57Z",
+  "updated": "2026-11-21T13:59:57Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -150,9 +150,21 @@
       "advocates": 1,
       "campaigns": 1,
       "bothChambers": false
+    },
+    {
+      "name": "The Bowersock Mills and Power Co",
+      "letters": 1,
+      "advocates": 1,
+      "campaigns": 1,
+      "bothChambers": false
     }
   ],
   "activity": [
+    {
+      "company": "The Bowersock Mills and Power Co",
+      "target": "the U.S. House",
+      "at": "2026-11-21T13:04:41Z"
+    },
     {
       "company": "Mavel Americas, Inc.",
       "target": "the U.S. House",
@@ -177,11 +189,6 @@
       "company": "Burns and McDonnell",
       "target": "both chambers of Congress",
       "at": "2026-11-18T20:59:43Z"
-    },
-    {
-      "company": null,
-      "target": "both chambers of Congress",
-      "at": "2026-11-17T17:44:46Z"
     }
   ]
 }
