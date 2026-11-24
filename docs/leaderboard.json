@@ -1,6 +1,6 @@
 {
-  "checked": "2026-11-23T23:07:44Z",
-  "updated": "2026-11-21T13:59:57Z",
+  "checked": "2026-11-24T00:03:15Z",
+  "updated": "2026-11-24T00:03:15Z",
   "campaign": {
     "name": "Support the Bipartisan American Affordability and Jobs Act (BAAJA)",
     "goal": 150
@@ -54,6 +54,13 @@
       "bothChambers": true
     },
     {
+      "name": "Hydro Governor SME",
+      "letters": 4,
+      "advocates": 1,
+      "campaigns": 2,
+      "bothChambers": true
+    },
+    {
       "name": "NHA",
       "letters": 4,
       "advocates": 1,
@@ -100,13 +107,6 @@
       "letters": 3,
       "advocates": 1,
       "campaigns": 1,
-      "bothChambers": true
-    },
-    {
-      "name": "Hydro SME LLC",
-      "letters": 3,
-      "advocates": 1,
-      "campaigns": 2,
       "bothChambers": true
     },
     {
@@ -161,6 +161,11 @@
   ],
   "activity": [
     {
+      "company": "Hydro Governor SME",
+      "target": "the U.S. House",
+      "at": "2026-11-23T23:56:51Z"
+    },
+    {
       "company": "The Bowersock Mills and Power Co",
       "target": "the U.S. House",
       "at": "2026-11-21T13:04:41Z"
@@ -184,11 +189,6 @@
       "company": "PNNL",
       "target": "both chambers of Congress",
       "at": "2026-11-20T12:24:58Z"
-    },
-    {
-      "company": "Burns and McDonnell",
-      "target": "both chambers of Congress",
-      "at": "2026-11-18T20:59:43Z"
     }
   ]
 }
